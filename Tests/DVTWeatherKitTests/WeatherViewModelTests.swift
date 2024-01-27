@@ -9,11 +9,15 @@ import XCTest
 
 struct WeatherViewModel {
     let currentTemperature = "-°"
+    let minTemperature = "-°"
+    let maxTemperature = "-°"
 }
 
 final class WeatherViewModelTests {
     func testOnInit() {
         let sut = WeatherViewModel()
         XCTAssertEqual(sut.currentTemperature, "-°")
+        XCTAssertEqual(sut.minTemperature, "-°")
+        XCTAssertEqual(sut.maxTemperature, "-°")
     }
 }
