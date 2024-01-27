@@ -35,16 +35,21 @@ final class WeatherViewModelTests: XCTestCase {
     // on appear - fetches current weather - states: nil - loading - loaded current
     
     func testOnAppearFetchesCurrentWeather() async {
-        let givenTemperature = 32
-        let stub = FetchWeatherUseCaseStub(result: givenTemperature)
-        let sut = makeSUT(fetchWeatherUseCase: stub)
+        let givenTemperatures = [-20, 0, 32]
         
-        await sut.viewDidAppear()
-        
-        let actualTemperature = sut.currentTemperature
-        let expectedTemperature = "\(givenTemperature)°"
-        XCTAssertEqual(actualTemperature, expectedTemperature)
+        for givenTemperature in givenTemperatures {
+            
+            let stub = FetchWeatherUseCaseStub(result: givenTemperature)
+            let sut = makeSUT(fetchWeatherUseCase: stub)
+            
+            await sut.viewDidAppear()
+            
+            let actualTemperature = sut.currentTemperature
+            let expectedTemperature = "\(givenTemperature)°"
+            XCTAssertEqual(actualTemperature, expectedTemperature)
+        }
     }
+    
     // on appear - fetches forecast data; states: nil - loading - loaded forecast
     
     
