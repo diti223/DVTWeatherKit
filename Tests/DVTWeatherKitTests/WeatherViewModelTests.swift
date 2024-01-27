@@ -6,43 +6,7 @@
 //
 
 import XCTest
-
-typealias Celsius = Int
-
-protocol FetchWeatherUseCase {
-    func fetch() -> Celsius
-}
-
-
-class WeatherViewModel {
-    static let weekdaySymbols = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-    
-    var currentTemperature = "-°"
-    let minTemperature = "-°"
-    let maxTemperature = "-°"
-    
-    let forecastDays: [String]
-    
-    
-    let fetchWeatherUseCase: FetchWeatherUseCase
-    
-    init(calendar: Calendar = .current, date: Date = Date(), fetchWeatherUseCase: FetchWeatherUseCase) {
-        self.fetchWeatherUseCase = fetchWeatherUseCase
-        
-        let currentWeekday = calendar.dateComponents([.weekday], from: date).weekday!
-        let weekdaySymbolIndex = currentWeekday - 1
-        forecastDays = (1...5).map { offset in
-            Self.weekdaySymbols[(weekdaySymbolIndex + offset) % 7]
-        }
-    }
-    
-    func viewDidAppear() async {
-        let temperature = fetchWeatherUseCase.fetch()
-        currentTemperature = "\(temperature)°"
-    }
-}
-
-
+import DVTWeatherKit
 
 final class WeatherViewModelTests: XCTestCase {
     func testOnInit() {
