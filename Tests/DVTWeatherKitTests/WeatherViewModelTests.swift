@@ -7,48 +7,95 @@
 
 import XCTest
 
-struct WeatherViewModel {
-    let currentTemperature = "-°"
+typealias Celsius = Int
+
+protocol FetchWeatherUseCase {
+    func fetch() -> Celsius
+}
+
+
+class WeatherViewModel {
+    static let weekdaySymbols = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    
+    var currentTemperature = "-°"
     let minTemperature = "-°"
     let maxTemperature = "-°"
     
     let forecastDays: [String]
     
-    init(calendar: Calendar = .current, date: Date = Date()) {
-        let currentWeekday = calendar.dateComponents([.weekday], from: date).weekday!
+    
+    let fetchWeatherUseCase: FetchWeatherUseCase
+    
+    init(calendar: Calendar = .current, date: Date = Date(), fetchWeatherUseCase: FetchWeatherUseCase) {
+        self.fetchWeatherUseCase = fetchWeatherUseCase
         
+        let currentWeekday = calendar.dateComponents([.weekday], from: date).weekday!
         let weekdaySymbolIndex = currentWeekday - 1
-
         forecastDays = (1...5).map { offset in
-            calendar.weekdaySymbols[(weekdaySymbolIndex + offset) % 7]
+            Self.weekdaySymbols[(weekdaySymbolIndex + offset) % 7]
         }
+    }
+    
+    func viewDidAppear() async {
+        let temperature = fetchWeatherUseCase.fetch()
+        currentTemperature = "\(temperature)°"
     }
 }
 
+
+
 final class WeatherViewModelTests: XCTestCase {
     func testOnInit() {
-        let sut = WeatherViewModel()
+        let sut = makeSUT()
         XCTAssertEqual(sut.currentTemperature, "-°")
         XCTAssertEqual(sut.minTemperature, "-°")
         XCTAssertEqual(sut.maxTemperature, "-°")
-        
     }
     
     func testOnInitPresentForecastDays() {
         let calendar = Calendar(identifier: .gregorian)
+
         let mondayDate = Date.make(calendar: calendar, year: 2024, month: 1, day: 29)!
         XCTAssertEqual(
-            WeatherViewModel(calendar: calendar, date: mondayDate).forecastDays,
+            makeSUT(calendar: calendar, date: mondayDate).forecastDays,
             ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
         )
         
         let fridayDate = Date.make(calendar: calendar, year: 2024, month: 2, day: 2)!
         XCTAssertEqual(
-            WeatherViewModel(calendar: calendar, date: fridayDate).forecastDays,
+            makeSUT(calendar: calendar, date: fridayDate).forecastDays,
             ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday"]
         )
     }
     
+    // on appear - fetches current weather - states: nil - loading - loaded current
+    
+    func testOnAppearFetchesCurrentWeather() async {
+        let givenTemperature = 32
+        let stub = FetchWeatherUseCaseStub(result: givenTemperature)
+        let sut = makeSUT(fetchWeatherUseCase: stub)
+        
+        await sut.viewDidAppear()
+        
+        let actualTemperature = sut.currentTemperature
+        let expectedTemperature = "\(givenTemperature)°"
+        XCTAssertEqual(actualTemperature, expectedTemperature)
+    }
+    // on appear - fetches forecast data; states: nil - loading - loaded forecast
+    
+    
+    //MARK: - Private Helper
+    private func makeSUT(calendar: Calendar = .current, date: Date = Date(), fetchWeatherUseCase: FetchWeatherUseCase = FetchWeatherUseCaseStub(result: 0)) -> WeatherViewModel {
+        WeatherViewModel(calendar: calendar, date: date, fetchWeatherUseCase: fetchWeatherUseCase)
+    }
+    
+}
+
+struct FetchWeatherUseCaseStub: FetchWeatherUseCase {
+    let result: Celsius
+    func fetch() -> Celsius {
+        result
+    }
 }
 
 extension Date {
