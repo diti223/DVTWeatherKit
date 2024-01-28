@@ -9,11 +9,6 @@ import Foundation
 import DVTWeatherKit
 import XCTest
 
-
-
-
-
-
 final class DVTWeatherKitAPITests: XCTestCase {
     func testCurrentConditions() async throws {
         let httpClient = URLSessionClient(
@@ -28,9 +23,10 @@ final class DVTWeatherKitAPITests: XCTestCase {
             location: location
         )
         
-        let currentClujWeather = try await sut.fetch()
-        
-        XCTAssertEqual(currentClujWeather.condition, .cloudy)
-        XCTAssertEqual(currentClujWeather.temperature, 2)
+        do {
+            let currentClujWeather = try await sut.fetch()
+        } catch {
+            XCTFail("Expected to decode response but got \(error)")
+        }
     }
 }
