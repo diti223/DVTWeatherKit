@@ -21,7 +21,7 @@ final class WeatherViewModelTests: XCTestCase {
         
         for givenTemperature in givenTemperatures {
             
-            let stub = FetchWeatherUseCaseStub(result: givenTemperature)
+            let stub = FetchWeatherUseCaseStub(result: Weather(temperature: givenTemperature, condition: .sunny))
             let sut = makeSUT(fetchWeatherUseCase: stub)
             
             await sut.viewDidAppear()
@@ -29,6 +29,10 @@ final class WeatherViewModelTests: XCTestCase {
             let actualTemperature = sut.currentTemperature
             let expectedTemperature = "\(givenTemperature)°"
             XCTAssertEqual(actualTemperature, expectedTemperature)
+            
+            let actualCondition = sut.currentCondition
+            let expectedCondition = "Sunny"
+            XCTAssertEqual(actualCondition, expectedCondition)
         }
     }
     
@@ -36,7 +40,7 @@ final class WeatherViewModelTests: XCTestCase {
     private func makeSUT(
         calendar: Calendar = .current,
         date: Date = Date(),
-        fetchWeatherUseCase: FetchWeatherUseCase = FetchWeatherUseCaseStub(result: 0)
+        fetchWeatherUseCase: FetchWeatherUseCase = FetchWeatherUseCaseStub(result: Weather(temperature: -300, condition: .sunny))
     ) -> WeatherViewModel {
         WeatherViewModel(
             calendar: calendar,
@@ -49,8 +53,8 @@ final class WeatherViewModelTests: XCTestCase {
 
 
 struct FetchWeatherUseCaseStub: FetchWeatherUseCase {
-    let result: Celsius
-    func fetch() -> Celsius {
+    let result: Weather
+    func fetch() -> Weather {
         result
     }
 }

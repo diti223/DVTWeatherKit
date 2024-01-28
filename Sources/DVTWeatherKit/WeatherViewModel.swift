@@ -9,7 +9,22 @@ import Foundation
 
 public final class WeatherViewModel {
     
-    public private(set) var currentTemperature = "-°"
+    private var currentWeather: Weather?
+    public var currentTemperature: String {
+        guard let currentWeather else {
+            return "-°"
+        }
+        return "\(currentWeather.temperature)°"
+    }
+    
+    public var currentCondition: String? {
+        switch currentWeather?.condition {
+            case .sunny:
+                "Sunny"
+            default:
+                nil
+        }
+    }
     
     public let minTemperature = "-°"
     public let maxTemperature = "-°"
@@ -25,8 +40,7 @@ public final class WeatherViewModel {
     }
     
     public func viewDidAppear() async {
-        let temperature = fetchWeatherUseCase.fetch()
-        currentTemperature = "\(temperature)°"
+        currentWeather = fetchWeatherUseCase.fetch()
     }
 }
 

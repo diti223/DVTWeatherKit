@@ -12,7 +12,6 @@ public final class ForecastViewModel {
     
     public private(set) var temperatures: [String] = []
     
-    
     public let forecastDays: [String]
     
     let fetchForecastUseCase: FetchForecastUseCase
