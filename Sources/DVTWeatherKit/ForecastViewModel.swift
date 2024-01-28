@@ -11,6 +11,7 @@ public final class ForecastViewModel {
     private static let weekdaySymbols = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     
     public private(set) var temperatures: [String] = []
+    public private(set) var conditions: [WeatherCondition]?
     
     public let forecastDays: [String]
     
@@ -33,6 +34,7 @@ public final class ForecastViewModel {
     public func viewDidAppear() async {
         let forecast = fetchForecastUseCase.fetchForecast()
         temperatures = forecast.map { "\($0)°" }
+        conditions = forecast.map(\.condition)
     }
 }
 
@@ -51,4 +53,4 @@ public protocol FetchForecastUseCase {
     func fetchForecast() -> Forecast
 }
 
-public typealias Forecast = [Celsius]
+public typealias Forecast = [Weather]

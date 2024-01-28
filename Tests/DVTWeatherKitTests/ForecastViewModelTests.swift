@@ -12,6 +12,7 @@ final class ForecastViewModelTests: XCTestCase {
     func testOnInit() {
         let sut = makeSUT()
         XCTAssertEqual(sut.temperatures, [])
+        XCTAssertEqual(sut.conditions, nil)
     }
     
     func testOnInitPresentForecastDays() {
@@ -31,7 +32,11 @@ final class ForecastViewModelTests: XCTestCase {
     }
     
     func testOnAppearFetchesForecastWeather() async {
-        let givenForecast: Forecast = [20, 23, 27, 28, 30]
+        let givenTemperatures = [20, 23, 27, 28, 30]
+        let givenConditions = [WeatherCondition.sunny, .cloudy, .raining, .sunny, .cloudy]
+        let givenForecast: Forecast = zip(givenTemperatures, givenConditions).map { temp, condition in
+            Weather(temperature: temp, condition: condition)
+        }
         let stub = FetchForecastUseCaseStub(
             result: givenForecast
         )
@@ -40,6 +45,8 @@ final class ForecastViewModelTests: XCTestCase {
         await sut.viewDidAppear()
         let expectedTemperatures = givenForecast.map { "\($0)°" }
         XCTAssertEqual(sut.temperatures, expectedTemperatures)
+        XCTAssertEqual(sut.conditions, givenConditions)
+        
     }
     
     //MARK: - Private Helper
@@ -57,8 +64,8 @@ final class ForecastViewModelTests: XCTestCase {
 }
 
 struct FetchForecastUseCaseStub: FetchForecastUseCase {
-    let result: [Celsius]
-    func fetchForecast() -> [Celsius] {
+    let result: Forecast
+    func fetchForecast() -> Forecast {
         result
     }
 }
