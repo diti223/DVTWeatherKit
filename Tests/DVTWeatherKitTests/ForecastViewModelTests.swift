@@ -33,7 +33,7 @@ final class ForecastViewModelTests: XCTestCase {
     
     func testOnAppearFetchesForecastWeather() async {
         let givenTemperatures = [20, 23, 27, 28, 30]
-        let givenConditions = [WeatherCondition.sunny, .cloudy, .raining, .sunny, .cloudy]
+        let givenConditions = [WeatherCondition.sunny, .cloudy, .rainy, .sunny, .cloudy]
         let givenForecast: Forecast = zip(givenTemperatures, givenConditions).map { temp, condition in
             Weather(temperature: temp, condition: condition)
         }

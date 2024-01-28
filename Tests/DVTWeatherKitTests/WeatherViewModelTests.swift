@@ -20,7 +20,7 @@ final class WeatherViewModelTests: XCTestCase {
     func testOnAppearFetchesCurrentWeather() async {
         let givenWeather = [
             Weather(temperature: -20, condition: .sunny),
-            Weather(temperature: 0, condition: .raining),
+            Weather(temperature: 0, condition: .rainy),
             Weather(temperature: 32, condition: .cloudy)
         ]
         

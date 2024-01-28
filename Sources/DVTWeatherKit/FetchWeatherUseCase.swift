@@ -15,7 +15,7 @@ public protocol FetchWeatherUseCase {
 
 
 public enum WeatherCondition {
-    case sunny, cloudy, raining
+    case sunny, cloudy, rainy
 }
 
 public struct Weather {
