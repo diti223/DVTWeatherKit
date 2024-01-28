@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class WeatherViewModel {
+public final class WeatherViewModel: ObservableObject {
     
     private var currentWeather: Weather?
     public var currentTemperature: String {
@@ -45,6 +45,7 @@ public final class WeatherViewModel {
     
     public func viewDidAppear() async {
         currentWeather = await fetchWeatherUseCase.fetch()
+        objectWillChange.send()
     }
 }
 
