@@ -12,6 +12,7 @@ final class WeatherViewModelTests: XCTestCase {
     func testOnInit() {
         let sut = makeSUT()
         XCTAssertEqual(sut.currentTemperature, "-°")
+        XCTAssertEqual(sut.currentCondition, nil)
         XCTAssertEqual(sut.minTemperature, "-°")
         XCTAssertEqual(sut.maxTemperature, "-°")
     }

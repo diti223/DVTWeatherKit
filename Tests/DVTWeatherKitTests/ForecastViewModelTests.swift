@@ -53,10 +53,8 @@ final class ForecastViewModelTests: XCTestCase {
             date: date,
             fetchForecastUseCase: fetchForecastUseCase
         )
-    }
-    
+    }    
 }
-
 
 struct FetchForecastUseCaseStub: FetchForecastUseCase {
     let result: [Celsius]
