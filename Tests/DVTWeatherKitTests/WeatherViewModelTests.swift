@@ -18,22 +18,27 @@ final class WeatherViewModelTests: XCTestCase {
     }
     
     func testOnAppearFetchesCurrentWeather() async {
-        let givenTemperatures: [Celsius] = [-20, 0, 32]
+        let givenWeather = [
+            Weather(temperature: -20, condition: .sunny),
+            Weather(temperature: 0, condition: .raining),
+            Weather(temperature: 32, condition: .cloudy)
+        ]
         
-        for givenTemperature in givenTemperatures {
+        let expectedWeather = [
+            (temperature: "-20°", condition: "Sunny"),
+            (temperature: "0°", condition: "Rainy"),
+            (temperature: "32°", condition: "Cloudy")
+        ]
+        
+        for (given, expected) in zip(givenWeather, expectedWeather) {
             
-            let stub = FetchWeatherUseCaseStub(result: Weather(temperature: givenTemperature, condition: .sunny))
+            let stub = FetchWeatherUseCaseStub(result: given)
             let sut = makeSUT(fetchWeatherUseCase: stub)
             
             await sut.viewDidAppear()
             
-            let actualTemperature = sut.currentTemperature
-            let expectedTemperature = "\(givenTemperature)°"
-            XCTAssertEqual(actualTemperature, expectedTemperature)
-            
-            let actualCondition = sut.currentCondition
-            let expectedCondition = "Sunny"
-            XCTAssertEqual(actualCondition, expectedCondition)
+            XCTAssertEqual(sut.currentTemperature, expected.temperature)
+            XCTAssertEqual(sut.currentCondition, expected.condition)
         }
     }
     

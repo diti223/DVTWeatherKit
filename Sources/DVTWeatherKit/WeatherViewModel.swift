@@ -21,6 +21,10 @@ public final class WeatherViewModel {
         switch currentWeather?.condition {
             case .sunny:
                 "Sunny"
+            case .raining:
+                "Rainy"
+            case .cloudy:
+                "Cloudy"
             default:
                 nil
         }
