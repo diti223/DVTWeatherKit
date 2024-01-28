@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "C821C9EA-5FE2-4C92-8765-9074BBCC816E",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "DVTWeatherKitTests",
+        "name" : "DVTWeatherKitTests"
+      }
+    }
+  ],
+  "version" : 1
+}

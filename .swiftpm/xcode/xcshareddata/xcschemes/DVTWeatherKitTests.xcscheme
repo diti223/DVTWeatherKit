@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1510"
-   version = "1.7">
+   version = "2.2">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -9,16 +9,11 @@
          <BuildActionEntry
             buildForTesting = "YES"
             buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DVTWeatherKit"
-               BuildableName = "DVTWeatherKit"
-               BlueprintName = "DVTWeatherKit"
-               ReferencedContainer = "container:">
-            </BuildableReference>
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <AutocreatedTestPlanReference>
+            </AutocreatedTestPlanReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
@@ -61,9 +56,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DVTWeatherKit"
-            BuildableName = "DVTWeatherKit"
-            BlueprintName = "DVTWeatherKit"
+            BlueprintIdentifier = "DVTWeatherKitTests"
+            BuildableName = "DVTWeatherKitTests"
+            BlueprintName = "DVTWeatherKitTests"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>

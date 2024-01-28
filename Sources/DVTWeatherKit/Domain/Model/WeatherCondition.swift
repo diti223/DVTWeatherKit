@@ -7,6 +7,6 @@
 
 import Foundation
 
-public enum WeatherCondition {
+public enum WeatherCondition: Equatable {
     case sunny, cloudy, rainy
 }

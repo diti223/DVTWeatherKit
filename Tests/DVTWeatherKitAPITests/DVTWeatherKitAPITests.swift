@@ -9,19 +9,24 @@ import Foundation
 import DVTWeatherKit
 import XCTest
 
-struct APIFetchCurrentWeatherUseCase {
-    var session: URLSession = .shared
-    let location: (Double, Double)
-    
-    func fetch() async throws -> Weather {
-        return Weather(temperature: -300, condition: .sunny)
-    }
-}
+
+
+
+
 
 final class DVTWeatherKitAPITests: XCTestCase {
     func testCurrentConditions() async throws {
+        let httpClient = URLSessionClient(
+            baseURL: URL(string: "https://api.openweathermap.org")!,
+            session: .shared
+        ).addLog()
+            .addAuthorization(apiKey: APIKey.testing)
+
         let location = (latitude: 46.76936371348493, longitude: 23.590017678216558)
-        let sut = APIFetchCurrentWeatherUseCase(location: location)
+        let sut = APIFetchCurrentWeatherUseCase(
+            httpClient: httpClient,
+            location: location
+        )
         
         let currentClujWeather = try await sut.fetch()
         
