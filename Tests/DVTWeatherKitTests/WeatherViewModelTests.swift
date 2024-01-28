@@ -14,6 +14,8 @@ final class WeatherViewModelTests: XCTestCase {
         XCTAssertEqual(sut.currentTemperature, "-°")
         XCTAssertEqual(sut.minTemperature, "-°")
         XCTAssertEqual(sut.maxTemperature, "-°")
+        
+        XCTAssertEqual(sut.forecastTemperatures, [])
     }
     
     func testOnInitPresentForecastDays() {
@@ -32,10 +34,8 @@ final class WeatherViewModelTests: XCTestCase {
         )
     }
     
-    // on appear - fetches current weather - states: nil - loading - loaded current
-    
     func testOnAppearFetchesCurrentWeather() async {
-        let givenTemperatures = [-20, 0, 32]
+        let givenTemperatures: [Celsius] = [-20, 0, 32]
         
         for givenTemperature in givenTemperatures {
             
@@ -49,15 +49,41 @@ final class WeatherViewModelTests: XCTestCase {
             XCTAssertEqual(actualTemperature, expectedTemperature)
         }
     }
-    
-    // on appear - fetches forecast data; states: nil - loading - loaded forecast
-    
-    
-    //MARK: - Private Helper
-    private func makeSUT(calendar: Calendar = .current, date: Date = Date(), fetchWeatherUseCase: FetchWeatherUseCase = FetchWeatherUseCaseStub(result: 0)) -> WeatherViewModel {
-        WeatherViewModel(calendar: calendar, date: date, fetchWeatherUseCase: fetchWeatherUseCase)
+        
+    func testOnAppearFetchesForecastWeather() async {
+        let givenForecast: Forecast = [20, 23, 27, 28, 30]
+        let stub = FetchForecastUseCaseStub(
+            result: givenForecast
+        )
+        let sut = makeSUT(fetchForecastUseCase: stub)
+        
+        await sut.viewDidAppear()
+        let expectedTemperatures = givenForecast.map { "\($0)°" }
+        XCTAssertEqual(sut.forecastTemperatures, expectedTemperatures)
     }
     
+    //MARK: - Private Helper
+    private func makeSUT(
+        calendar: Calendar = .current,
+        date: Date = Date(),
+        fetchWeatherUseCase: FetchWeatherUseCase = FetchWeatherUseCaseStub(result: 0),
+        fetchForecastUseCase: FetchForecastUseCase = FetchForecastUseCaseStub(result: [])
+    ) -> WeatherViewModel {
+        WeatherViewModel(
+            calendar: calendar,
+            date: date,
+            fetchWeatherUseCase: fetchWeatherUseCase,
+            fetchForecastUseCase: fetchForecastUseCase
+        )
+    }
+    
+}
+
+struct FetchForecastUseCaseStub: FetchForecastUseCase {
+    let result: [Celsius]
+    func fetchForecast() -> [Celsius] {
+        result
+    }
 }
 
 struct FetchWeatherUseCaseStub: FetchWeatherUseCase {
