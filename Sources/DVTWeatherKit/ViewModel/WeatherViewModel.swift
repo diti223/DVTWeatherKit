@@ -44,7 +44,7 @@ public final class WeatherViewModel {
     }
     
     public func viewDidAppear() async {
-        currentWeather = fetchWeatherUseCase.fetch()
+        currentWeather = await fetchWeatherUseCase.fetch()
     }
 }
 

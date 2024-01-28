@@ -19,5 +19,8 @@ let package = Package(
         .testTarget(
             name: "DVTWeatherKitTests",
             dependencies: ["DVTWeatherKit"]),
+        .testTarget(
+            name: "DVTWeatherKitAPITests",
+            dependencies: ["DVTWeatherKit"]),
     ]
 )

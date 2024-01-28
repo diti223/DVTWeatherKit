@@ -38,19 +38,3 @@ public final class ForecastViewModel {
     }
 }
 
-
-//public struct ForecastDay {
-//    public let dayOffset: Int
-//    public let temperature: Celsius
-//
-//    public init(dayOffset: Int, temperature: Celsius) {
-//        self.dayOffset = dayOffset
-//        self.temperature = temperature
-//    }
-//}
-
-public protocol FetchForecastUseCase {
-    func fetchForecast() -> Forecast
-}
-
-public typealias Forecast = [Weather]
