@@ -31,7 +31,7 @@ final class APIFetchCurrentWeatherUseCaseTests: XCTestCase {
         let queryItems = [
             URLQueryItem(name: "lat", value: "\(location.latitude)"),
             URLQueryItem(name: "lon", value: "\(location.longitude)"),
-            URLQueryItem(name: "unit", value: "metric")
+            URLQueryItem(name: "units", value: "metric")
         ]
         let request = HTTPRequest(method: .get, path: path, queryItems: queryItems)
         client.stub(

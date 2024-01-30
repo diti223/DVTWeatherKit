@@ -20,7 +20,7 @@ public struct APIFetchCurrentWeatherUseCase {
         let queryItems = [
             URLQueryItem(name: "lat", value: "\(location.latitude)"),
             URLQueryItem(name: "lon", value: "\(location.longitude)"),
-            URLQueryItem(name: "unit", value: "metric")
+            URLQueryItem(name: "units", value: "metric")
         ]
         
         let request = HTTPRequest(

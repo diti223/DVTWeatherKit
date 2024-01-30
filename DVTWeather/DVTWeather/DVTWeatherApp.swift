@@ -12,13 +12,22 @@ import DVTWeatherKit
 struct DVTWeatherApp: App {
     let calendar = Calendar.current
     let date = Date()
+    let httpClient = URLSessionClient(
+        baseURL: URL(string: "https://api.openweathermap.org")!,
+        session: .shared
+    )
+    
     var body: some Scene {
         WindowGroup {
             WeatherView(
                 viewModel: WeatherViewModel(
                     calendar: calendar,
                     date: date,
-                    fetchWeatherUseCase: DemoFetchWeatherUseCase()
+                    fetchWeatherUseCase: LocationDecoratedAPIWeatherUseCase(
+                        httpClient: httpClient.addLog().addAuthorization(
+                            apiKey: APIKey.demo
+                        )
+                    )
                 ),
                 forecastViewModel: ForecastViewModel(
                     calendar: calendar,
@@ -29,22 +38,3 @@ struct DVTWeatherApp: App {
         }
     }
 }
-
-struct DemoFetchWeatherUseCase: FetchWeatherUseCase {
-    func fetch() async -> Weather {
-        Weather(temperature: 25, condition: .sunny)
-    }
-}
-
-struct DemoFetchForecastUseCase: FetchForecastUseCase {
-    func fetchForecast() async -> Forecast {
-        [
-            Weather(temperature: 20, condition: .sunny),
-            Weather(temperature: 23, condition: .sunny),
-            Weather(temperature: 27, condition: .sunny),
-            Weather(temperature: 28, condition: .sunny),
-            Weather(temperature: 30, condition: .sunny)
-        ]
-    }
-}
-    
