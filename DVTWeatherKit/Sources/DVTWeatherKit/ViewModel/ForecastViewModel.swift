@@ -23,6 +23,7 @@ public final class ForecastViewModel: ObservableObject {
     
     public let forecastDays: [String]
     
+    
     let fetchForecastUseCase: FetchForecastUseCase
     
     public init(
@@ -39,6 +40,7 @@ public final class ForecastViewModel: ObservableObject {
         }
     }
     
+    @MainActor
     public func viewDidAppear() async {
         let forecast = await fetchForecastUseCase.fetchForecast()
         self.forecast = forecast

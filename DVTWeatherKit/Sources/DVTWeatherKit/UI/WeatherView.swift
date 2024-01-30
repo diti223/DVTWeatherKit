@@ -29,13 +29,44 @@ public struct WeatherView: View {
             }
             ZStack {
                 Color(condition: viewModel.currentCondition)
-                ForecastView(
-                    viewModel: forecastViewModel
-                )
+                VStack {
+                    extremesView
+                        .foregroundStyle(Color.white)
+                    forecastView
+                }
+                .padding(.horizontal, 12)
+                .padding(8)
+                .font(.body.bold())
             }
             
         }
         .ignoresSafeArea()
+    }
+    
+    private var extremesView: some View {
+        ZStack {
+            HStack {
+                VStack {
+                    Text(viewModel.minTemperature)
+                    Text("min")
+                }
+                Spacer()
+                VStack {
+                    Text(viewModel.maxTemperature)
+                    Text("max")
+                }
+            }
+            VStack {
+                Text(viewModel.currentTemperature)
+                Text("Current")
+            }
+        }
+    }
+    
+    private var forecastView: some View {
+        ForecastView(
+            viewModel: forecastViewModel
+        )
     }
     
     private var currentWeather: some View {
@@ -51,6 +82,7 @@ public struct WeatherView: View {
         }
         .foregroundStyle(Color.white)
         .font(.largeTitle.bold())
+        .padding(.bottom, 24)
         
     }
 }

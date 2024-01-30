@@ -11,6 +11,7 @@
 		3A5ED82B2B669D08007EB66A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A5ED82A2B669D08007EB66A /* Assets.xcassets */; };
 		3A5ED82E2B669D08007EB66A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A5ED82D2B669D08007EB66A /* Preview Assets.xcassets */; };
 		3A5ED8372B68EB18007EB66A /* DVTWeatherKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3A5ED8362B68EB18007EB66A /* DVTWeatherKit */; };
+		3A5ED83C2B697919007EB66A /* DVTWeatherKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3A5ED83B2B697919007EB66A /* DVTWeatherKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A5ED8372B68EB18007EB66A /* DVTWeatherKit in Frameworks */,
+				3A5ED83C2B697919007EB66A /* DVTWeatherKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +86,7 @@
 			name = DVTWeather;
 			packageProductDependencies = (
 				3A5ED8362B68EB18007EB66A /* DVTWeatherKit */,
+				3A5ED83B2B697919007EB66A /* DVTWeatherKit */,
 			);
 			productName = DVTWeather;
 			productReference = 3A5ED8232B669D06007EB66A /* DVTWeather.app */;
@@ -114,7 +117,7 @@
 			);
 			mainGroup = 3A5ED81A2B669D06007EB66A;
 			packageReferences = (
-				3A5ED8352B68EB18007EB66A /* XCLocalSwiftPackageReference ".." */,
+				3A5ED83A2B697919007EB66A /* XCLocalSwiftPackageReference "../DVTWeatherKit" */,
 			);
 			productRefGroup = 3A5ED8242B669D06007EB66A /* Products */;
 			projectDirPath = "";
@@ -350,14 +353,18 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		3A5ED8352B68EB18007EB66A /* XCLocalSwiftPackageReference ".." */ = {
+		3A5ED83A2B697919007EB66A /* XCLocalSwiftPackageReference "../DVTWeatherKit" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ..;
+			relativePath = ../DVTWeatherKit;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		3A5ED8362B68EB18007EB66A /* DVTWeatherKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DVTWeatherKit;
+		};
+		3A5ED83B2B697919007EB66A /* DVTWeatherKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DVTWeatherKit;
 		};

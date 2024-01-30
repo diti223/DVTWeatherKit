@@ -31,9 +31,6 @@ struct ForecastView: View {
                                 .resizable()
                                 .frame(width: 25, height: 25)
                         }
-                        .padding(.horizontal, 12)
-                        .padding(8)
-                        .font(.body.bold())
                     }
                     .foregroundStyle(Color.white)
                 }

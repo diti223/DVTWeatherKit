@@ -10,13 +10,20 @@ import DVTWeatherKit
 
 @main
 struct DVTWeatherApp: App {
+    let calendar = Calendar.current
+    let date = Date()
     var body: some Scene {
         WindowGroup {
             WeatherView(
                 viewModel: WeatherViewModel(
-                    calendar: .current,
-                    date: Date(),
+                    calendar: calendar,
+                    date: date,
                     fetchWeatherUseCase: DemoFetchWeatherUseCase()
+                ),
+                forecastViewModel: ForecastViewModel(
+                    calendar: calendar,
+                    date: date,
+                    fetchForecastUseCase: DemoFetchForecastUseCase()
                 )
             )
         }
@@ -25,6 +32,19 @@ struct DVTWeatherApp: App {
 
 struct DemoFetchWeatherUseCase: FetchWeatherUseCase {
     func fetch() async -> Weather {
-        Weather(temperature: -1, condition: .sunny)
+        Weather(temperature: 25, condition: .sunny)
     }
 }
+
+struct DemoFetchForecastUseCase: FetchForecastUseCase {
+    func fetchForecast() async -> Forecast {
+        [
+            Weather(temperature: 20, condition: .sunny),
+            Weather(temperature: 23, condition: .sunny),
+            Weather(temperature: 27, condition: .sunny),
+            Weather(temperature: 28, condition: .sunny),
+            Weather(temperature: 30, condition: .sunny)
+        ]
+    }
+}
+    
