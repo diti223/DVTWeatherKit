@@ -16,7 +16,7 @@ public struct APIFetchCurrentWeatherUseCase {
         self.location = location
     }
     
-    public func fetch() async throws -> Weather {
+    public func fetch() async throws -> ExtremesWeather {
         let queryItems = [
             URLQueryItem(name: "lat", value: "\(location.latitude)"),
             URLQueryItem(name: "lon", value: "\(location.longitude)"),
@@ -32,27 +32,54 @@ public struct APIFetchCurrentWeatherUseCase {
         let response = try await httpClient.data(request)
         
         let jsonDecoder = JSONDecoder()
+        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        
         let apiResponse = try jsonDecoder.decode(APIFetchCurrentWeatherResponse.self, from: response.body)
-        
-        let weather = apiResponse.toWeather()
-        
-        return weather
+        return try apiResponse.toExtremesWeather()
     }
 }
 
 struct APIFetchCurrentWeatherResponse: Decodable {
-    //    struct APIWeather: Decodable {
-    //        let main: String
-    //    }
+    struct APIWeather: Decodable {
+        let id: Int
+    }
     struct Main: Decodable {
         let temp: Double
+        let tempMin: Double
+        let tempMax: Double
     }
     
-    //    let weather: APIWeather
+    let weather: [APIWeather]
     let main: Main
     
-    func toWeather() -> Weather {
-        let weather = Weather(temperature: Celsius(main.temp), condition: .sunny)
+    func toWeather() throws -> Weather {
+        guard let weatherCode = weather.last?.id else {
+            let errorContext = DecodingError.Context(codingPath: [], debugDescription: "Expected at least one weather condition but got none.")
+            throw DecodingError.valueNotFound(String.self, errorContext)
+        }
+        
+        let condition: WeatherCondition = {
+            switch weatherCode {
+                case 800:
+                    return .sunny
+                case 801...804:
+                    return .cloudy
+                case 200...599:
+                    return .rainy
+                default:
+                    return .cloudy
+            }
+        }()
+        
+        let weather = Weather(temperature: Celsius(main.temp), condition: condition)
         return weather
+    }
+    
+    func toExtremesWeather() throws -> ExtremesWeather {
+        ExtremesWeather(
+            weather: try toWeather(),
+            minTemperature: Celsius(main.tempMin),
+            maxTemperature: Celsius(main.tempMax)
+        )
     }
 }

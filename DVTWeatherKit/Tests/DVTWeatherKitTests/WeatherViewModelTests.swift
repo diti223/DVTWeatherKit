@@ -44,7 +44,13 @@ final class WeatherViewModelTests: XCTestCase {
         
         for (given, expected) in zip(givenWeather, expectedWeather) {
             
-            let stub = FetchWeatherUseCaseStub(result: given)
+            let stub = FetchWeatherUseCaseStub(
+                result: ExtremesWeather(
+                    weather: given,
+                    minTemperature: -10,
+                    maxTemperature: 20
+                )
+            )
             let sut = makeSUT(fetchWeatherUseCase: stub)
             
             await sut.viewDidAppear()
@@ -52,6 +58,8 @@ final class WeatherViewModelTests: XCTestCase {
             XCTAssertEqual(sut.currentTemperature, expected.temperature)
             XCTAssertEqual(sut.currentConditionName, expected.conditionName)
             XCTAssertEqual(sut.currentCondition, expected.condition)
+            XCTAssertEqual(sut.maxTemperature, "20°")
+            XCTAssertEqual(sut.minTemperature, "-10°")
         }
     }
     
@@ -59,21 +67,27 @@ final class WeatherViewModelTests: XCTestCase {
     private func makeSUT(
         calendar: Calendar = .current,
         date: Date = Date(),
-        fetchWeatherUseCase: FetchWeatherUseCase = FetchWeatherUseCaseStub(result: Weather(temperature: -300, condition: .sunny))
-    ) -> WeatherViewModel {
-        WeatherViewModel(
-            calendar: calendar,
-            date: date,
-            fetchWeatherUseCase: fetchWeatherUseCase
-        )
+        fetchWeatherUseCase: FetchWeatherUseCase = FetchWeatherUseCaseStub(result: .dummy)) -> WeatherViewModel {
+            WeatherViewModel(
+                calendar: calendar,
+                date: date,
+                fetchWeatherUseCase: fetchWeatherUseCase
+            )
     }
     
 }
 
+extension ExtremesWeather {
+    static let dummy = ExtremesWeather(
+        weather: Weather(temperature: -300, condition: .sunny),
+        minTemperature: 0,
+        maxTemperature: 0
+    )
+}
 
 struct FetchWeatherUseCaseStub: FetchWeatherUseCase {
-    let result: Weather
-    func fetch() -> Weather {
+    let result: ExtremesWeather
+    func fetch() async throws -> DVTWeatherKit.ExtremesWeather {
         result
     }
 }

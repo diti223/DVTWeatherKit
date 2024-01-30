@@ -49,6 +49,8 @@ class LocationDecoratedAPIWeatherUseCase: NSObject, CLLocationManagerDelegate, F
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        //TODO: handle CLError codes
+//        CLError(CLError.Code.denied)
         continuation?.resume(throwing: error)
     }
 }

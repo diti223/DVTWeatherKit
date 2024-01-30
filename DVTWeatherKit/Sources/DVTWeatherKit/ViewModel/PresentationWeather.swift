@@ -10,6 +10,8 @@ import Foundation
 public struct PresentationWeather {
     public let temperature: String
     public let condition: WeatherCondition
+    public let minTemperature: String
+    public let maxTemperature: String
     
     public var conditionName: String {
         switch condition {

@@ -9,6 +9,8 @@ import Foundation
 
 public final class WeatherViewModel: ObservableObject {
     @Published public private(set) var currentWeather = PresentationWeather.placeholder
+    @Published public var errorMessage: String?
+    
     public var currentTemperature: String {
         currentWeather.temperature
     }
@@ -21,8 +23,13 @@ public final class WeatherViewModel: ObservableObject {
         currentWeather.conditionName
     }
     
-    public let minTemperature = "-°"
-    public let maxTemperature = "-°"
+    public var minTemperature: String {
+        currentWeather.minTemperature
+    }
+    
+    public var maxTemperature: String {
+        currentWeather.maxTemperature
+    }
     
     let fetchWeatherUseCase: FetchWeatherUseCase
     
@@ -36,26 +43,30 @@ public final class WeatherViewModel: ObservableObject {
     
     @MainActor
     public func viewDidAppear() async {
-        let weather = await fetchWeatherUseCase.fetch()
-        self.currentWeather = PresentationWeather(weather: weather)
+        do {
+            let extremesWeather = try await fetchWeatherUseCase.fetch()
+            self.currentWeather = PresentationWeather(extremesWeather: extremesWeather)
+        } catch {
+            self.errorMessage = error.localizedDescription
+        }
     }
 }
 
 
 extension PresentationWeather {
-    static let placeholder = PresentationWeather(temperature: "-°", condition: .sunny)
+    static let placeholder = PresentationWeather(
+        temperature: "-°",
+        condition: .sunny,
+        minTemperature: "-°",
+        maxTemperature: "-°"
+    )
     
-    init(celsius: Celsius, condition: WeatherCondition) {
+    init(extremesWeather: ExtremesWeather) {
         self.init(
-            temperature: "\(celsius)°",
-            condition: condition
-        )
-    }
-    
-    init(weather: Weather) {
-        self.init(
-            celsius: weather.temperature,
-            condition: weather.condition
+            temperature: "\(extremesWeather.weather.temperature)°",
+            condition: extremesWeather.weather.condition,
+            minTemperature: "\(extremesWeather.minTemperature)°",
+            maxTemperature: "\(extremesWeather.maxTemperature)°"
         )
     }
 }

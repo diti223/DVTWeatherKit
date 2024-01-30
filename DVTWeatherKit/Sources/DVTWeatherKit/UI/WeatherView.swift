@@ -41,6 +41,20 @@ public struct WeatherView: View {
             
         }
         .ignoresSafeArea()
+        .alert(
+            "Error",
+            isPresented: $viewModel.hasError,
+            presenting: viewModel.errorMessage, actions: { error in
+                Button(action: {
+                    viewModel.hasError = false
+                }, label: {
+                    Text("OK")
+                })
+            }, message: { errorMessage in
+                Text(errorMessage)
+            }
+        )
+        
     }
     
     private var extremesView: some View {
@@ -105,6 +119,13 @@ extension Image {
     }
 }
 
+extension WeatherViewModel {
+    var hasError: Bool {
+        get { errorMessage != nil }
+        set { errorMessage = nil }
+    }
+}
+
 #Preview("Sunny") {
     WeatherView(
         viewModel: WeatherViewModel(
@@ -141,11 +162,15 @@ extension Weather {
 struct PreviewFetchWeatherUseCase: FetchWeatherUseCase {
     let weather: Weather
     var delay: TimeInterval?
-    func fetch() async -> Weather {
+    func fetch() async throws -> ExtremesWeather {
         if let delay {
             try! await Task.sleep(for: .seconds(delay))
         }
-        return weather
+        return ExtremesWeather(
+            weather: weather,
+            minTemperature: -1,
+            maxTemperature: 35
+        )
     }
 }
 

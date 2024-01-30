@@ -44,8 +44,6 @@ public final class ForecastViewModel: ObservableObject {
     public func viewDidAppear() async {
         let forecast = await fetchForecastUseCase.fetchForecast()
         self.forecast = forecast
-//        temperatures = forecast.map { "\($0)°" }
-//        conditions = forecast.map(\.condition)
     }
 }
 

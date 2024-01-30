@@ -43,7 +43,7 @@ final class ForecastViewModelTests: XCTestCase {
         let sut = makeSUT(fetchForecastUseCase: stub)
         
         await sut.viewDidAppear()
-        let expectedTemperatures = givenForecast.map { "\($0)°" }
+        let expectedTemperatures = givenForecast.map(\.temperature).map { "\($0)°" }
         XCTAssertEqual(sut.temperatures, expectedTemperatures)
         XCTAssertEqual(sut.conditions, givenConditions)
         

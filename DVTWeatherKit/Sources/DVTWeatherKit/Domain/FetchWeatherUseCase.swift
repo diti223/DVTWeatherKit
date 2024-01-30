@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol FetchWeatherUseCase {
-    func fetch() async -> Weather
+    func fetch() async throws -> ExtremesWeather
 }
